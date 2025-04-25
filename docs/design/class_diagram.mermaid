@@ -1,0 +1,63 @@
+classDiagram
+    class App {
+        -theme: ThemeContext
+        -stories: StoryContext
+        +render() void
+    }
+    
+    class EmotionalStoryCards {
+        -stories: Story[]
+        -currentIndex: number
+        +handleSwipe() void
+        +renderStory() void
+    }
+    
+    class Story {
+        +id: string
+        +title: string
+        +description: string
+        +image: string
+        +scenario: string
+    }
+    
+    class SceneBasedShowcase {
+        -scenes: Scene[]
+        -activeScene: string
+        +switchScene() void
+        +renderScene() void
+    }
+    
+    class Scene {
+        +id: string
+        +name: string
+        +products: Product[]
+        +description: string
+    }
+    
+    class Product {
+        +id: string
+        +name: string
+        +description: string
+        +price: number
+        +images: string[]
+        +features: string[]
+    }
+    
+    class SocialProof {
+        -testimonials: Testimonial[]
+        +renderTestimonials() void
+    }
+    
+    class PurchaseGuide {
+        -stores: Store[]
+        +renderStores() void
+        +handlePurchase() void
+    }
+    
+    App *-- EmotionalStoryCards
+    App *-- SceneBasedShowcase
+    App *-- SocialProof
+    App *-- PurchaseGuide
+    EmotionalStoryCards o-- Story
+    SceneBasedShowcase o-- Scene
+    Scene o-- Product

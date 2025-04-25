@@ -1,0 +1,27 @@
+{
+  "sections": [
+    {
+      "name": "Emotional Flash Cards",
+      "component": "EmotionalFlashCards.jsx",
+      "content_type": "Interactive Cards",
+      "elements": [
+        {
+          "type": "Card",
+          "content": {
+            "title": "社交自信",
+            "description": "在重要场合，来贺助你从容展现",
+            "image": "/assets/images/emotional/celebration-moment.jpg"
+          }
+        },
+        {
+          "type": "Card",
+          "content": {
+            "title": "欢庆时刻",
+            "description": "让每一次相聚都值得纪念",
+            "image": "/assets/images/emotional/family-moment.jpg"
+          }
+        }
+      ]
+    }
+  ]
+}

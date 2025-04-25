@@ -1,0 +1,72 @@
+{
+  "root": ".",
+  "framework": "docker",
+  "packageManager": "npm",
+  "buildCommand": "docker build -t lihe-mobile .",
+  "installCommand": "npm install",
+  "buildOutput": "dist",
+  "nodeVersion": "20",
+  "dev": {
+    "port": 3000,
+    "command": "npm run dev"
+  },
+  "env": {
+    "NODE_ENV": "production",
+    "PORT": "3000",
+    "VITE_APP_TITLE": "来贺白酒官网"
+  },
+  "routes": [
+    {
+      "handle": "filesystem"
+    },
+    {
+      "src": "/assets/(.*)",
+      "dest": "/assets/$1",
+      "headers": {
+        "cache-control": "public, max-age=31536000, immutable"
+      }
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/$1"
+    }
+  ],
+  "permissions": {
+    "filesystem": {
+      "root": true,
+      "write": true
+    }
+  },
+  "outputs": {
+    "dir": "dist",
+    "include": ["**/*"]
+  },
+  "build": {
+    "dockerfile": {
+      "path": "./Dockerfile",
+      "target": "runtime",
+      "buildContext": "."
+    },
+    "env": {
+      "CI": "false"
+    },
+    "command": "npm run build",
+    "output": "dist"
+  },
+  "deploy": {
+    "startCommand": "docker run -p 3000:80 lihe-mobile",
+    "config": {
+      "buildCommand": "docker build -t lihe-mobile .",
+      "installCommand": "npm install",
+      "outputDirectory": "dist",
+      "framework": "docker",
+      "nodeVersion": "18.x"
+    }
+  },
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@zeabur/builder-vite"
+    }
+  ]
+} 

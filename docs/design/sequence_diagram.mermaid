@@ -1,0 +1,26 @@
+sequenceDiagram
+    participant U as User
+    participant ESC as EmotionalStoryCards
+    participant SS as SceneBasedShowcase
+    participant SP as SocialProof
+    participant PG as PurchaseGuide
+    
+    U->>ESC: Enters website
+    ESC->>ESC: Initialize story cards
+    ESC->>U: Display first story
+    
+    U->>ESC: Swipes/Scrolls through stories
+    ESC->>ESC: Update story index
+    ESC->>U: Show next story
+    
+    U->>SS: Clicks scene
+    SS->>SS: Load scene data
+    SS->>U: Display scene products
+    
+    U->>SP: Scrolls to social proof
+    SP->>SP: Load testimonials
+    SP->>U: Show testimonials
+    
+    U->>PG: Clicks purchase
+    PG->>PG: Load store options
+    PG->>U: Show purchase options

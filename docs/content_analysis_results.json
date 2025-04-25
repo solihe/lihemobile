@@ -1,0 +1,57 @@
+{
+  "overall_score": 3.95,
+  "detailed_scores": [
+    {
+      "Strategy Area": "情感闪卡设计",
+      "Alignment Score": 3,
+      "Gap Analysis": "需要补充社交焦虑、痛点情感卡片",
+      "Weight": 0.25
+    },
+    {
+      "Strategy Area": "内容层级结构",
+      "Alignment Score": 4,
+      "Gap Analysis": "场景故事层级需要加强",
+      "Weight": 0.2
+    },
+    {
+      "Strategy Area": "视觉效果",
+      "Alignment Score": 5,
+      "Gap Analysis": "完全符合设计指南",
+      "Weight": 0.2
+    },
+    {
+      "Strategy Area": "交互设计",
+      "Alignment Score": 4,
+      "Gap Analysis": "手势放大功能待实现",
+      "Weight": 0.15
+    },
+    {
+      "Strategy Area": "文案风格",
+      "Alignment Score": 4,
+      "Gap Analysis": "场景描述可以更具体",
+      "Weight": 0.2
+    }
+  ],
+  "gaps": [
+    {
+      "Component": "情感共鸣",
+      "Missing Elements": "社交焦虑场景、礼物痛点展示",
+      "Priority": "High"
+    },
+    {
+      "Component": "内容层级",
+      "Missing Elements": "场景故事的深度展开",
+      "Priority": "Medium"
+    },
+    {
+      "Component": "执行原则",
+      "Missing Elements": "更多沉浸式交互效果",
+      "Priority": "Low"
+    }
+  ],
+  "recommendations": [
+    "补充社交焦虑相关的情感闪卡",
+    "加强场景故事的展示深度",
+    "增加产品互动体验功能"
+  ]
+}
