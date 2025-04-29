@@ -57,8 +57,8 @@ const Hero = () => {
             <div className="relative container mx-auto px-4">
               <div className="max-w-3xl mx-auto">
                 <div className="flex flex-col items-center">
-                  {/* Title image */}
-                  <div className="w-[80%] max-w-md z-30 mb-10">
+                  {/* Title image - 增加了 mt-32 来大幅下移图片到页面底部 */}
+                  <div className="w-[80%] max-w-md z-30 mb-10 mt-80">
                     <img
                       src={'/assets/images/hero/精彩值得来贺.png'}
                       alt="精彩值得来贺"
@@ -74,7 +74,9 @@ const Hero = () => {
                       }}
                     />
                   </div>
-                  {/* Purchase button image */}
+                  
+                  {/* 注释掉购买按钮 */}
+                  {/* Purchase button image 
                   <div className="w-48 cursor-pointer transform hover:scale-105 transition-transform duration-300">
                     <img
                       src={'/assets/images/icons/botton-buy.png'}
@@ -93,6 +95,7 @@ const Hero = () => {
                       }}
                     />
                   </div>
+                  */}
                 </div>
               </div>
             </div>

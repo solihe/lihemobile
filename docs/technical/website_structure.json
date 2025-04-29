@@ -1,27 +1,190 @@
 {
+  "appRoot": {
+    "id": "app-root",
+    "component": "App.jsx",
+    "description": "应用程序根组件，控制所有页面流程和状态",
+    "childSections": ["intro-section", "main-content"]
+  },
   "sections": [
     {
-      "name": "Emotional Flash Cards",
-      "component": "EmotionalFlashCards.jsx",
-      "content_type": "Interactive Cards",
-      "elements": [
+      "id": "intro-section",
+      "name": "引导页(闪卡展示)",
+      "component": "HeroSection.jsx",
+      "path": "/",
+      "description": "网站首次加载显示的引导页，展示品牌故事闪卡",
+      "state": "isHeroSectionActive",
+      "activationFunctions": ["初始加载", "showBrandStoryCards()"],
+      "exitFunctions": ["handleHeroSectionComplete()", "handleSkip()"],
+      "childElements": [
         {
-          "type": "Card",
-          "content": {
-            "title": "社交自信",
-            "description": "在重要场合，来贺助你从容展现",
-            "image": "/assets/images/emotional/celebration-moment.jpg"
-          }
+          "type": "Cards",
+          "description": "情感故事闪卡，自动播放或手动滑动切换"
         },
         {
-          "type": "Card",
-          "content": {
-            "title": "欢庆时刻",
-            "description": "让每一次相聚都值得纪念",
-            "image": "/assets/images/emotional/family-moment.jpg"
-          }
+          "type": "Navigation",
+          "description": "跳过按钮、暂停/播放按钮"
+        }
+      ]
+    },
+    {
+      "id": "main-content",
+      "name": "主内容区",
+      "component": "MainContent",
+      "path": "/",
+      "description": "引导页完成后显示的主要内容区域",
+      "state": "!isHeroSectionActive",
+      "childSections": [
+        {
+          "id": "home",
+          "name": "首页内容",
+          "component": "Hero.jsx",
+          "path": "/#home",
+          "description": "网站主内容区的首页，显示产品主图和品牌标语",
+          "elements": [
+            {
+              "id": "product-image",
+              "type": "Image",
+              "description": "产品主图(红色瓶子)"
+            },
+            {
+              "id": "brand-slogan",
+              "type": "Image",
+              "description": "品牌标语'精彩值得来贺'",
+              "position": "底部，使用mt-80下移防止遮挡产品"
+            },
+            {
+              "id": "buy-button",
+              "type": "Button",
+              "description": "立即购买按钮(已注释掉)",
+              "status": "已禁用"
+            }
+          ]
+        },
+        {
+          "id": "product-features",
+          "name": "产品特点",
+          "component": "ProductFeatures.jsx",
+          "path": "/#product-features",
+          "description": "展示产品特点和优势"
+        },
+        {
+          "id": "product-showcase",
+          "name": "产品展示",
+          "component": "ProductShowcase.jsx",
+          "path": "/#product-showcase",
+          "description": "产品系列展示"
+        },
+        {
+          "id": "brand-story",
+          "name": "品牌故事",
+          "component": "BrandStory.jsx",
+          "path": "/#brand-story",
+          "description": "品牌故事和历史介绍"
+        },
+        {
+          "id": "interactive-experience",
+          "name": "互动体验",
+          "component": "InteractiveExperience.jsx",
+          "description": "用户互动体验区块"
+        },
+        {
+          "id": "use-cases",
+          "name": "使用场景",
+          "component": "UseCases.jsx",
+          "description": "产品使用场景展示"
+        },
+        {
+          "id": "testimonials",
+          "name": "用户评价",
+          "component": "Testimonials.jsx",
+          "description": "用户评价和反馈"
+        },
+        {
+          "id": "quality-crafts",
+          "name": "品质工艺",
+          "component": "QualityCrafts.jsx",
+          "description": "产品工艺和品质介绍"
+        },
+        {
+          "id": "purchase-guide",
+          "name": "购买指南",
+          "component": "PurchaseGuide.jsx",
+          "path": "/#purchase-guide",
+          "description": "购买渠道和方式介绍"
+        },
+        {
+          "id": "contact",
+          "name": "联系我们",
+          "path": "/#contact",
+          "description": "联系方式和地址信息"
         }
       ]
     }
-  ]
+  ],
+  "globalComponents": [
+    {
+      "id": "menu-button",
+      "name": "菜单按钮",
+      "component": "MenuButton",
+      "description": "全局汉堡菜单按钮"
+    },
+    {
+      "id": "global-menu",
+      "name": "全局菜单",
+      "description": "点击菜单按钮显示的导航菜单",
+      "triggerFunction": "toggleMenu()"
+    },
+    {
+      "id": "scroll-progress",
+      "name": "滚动进度条",
+      "component": "ScrollProgress",
+      "description": "页面滚动进度指示器"
+    },
+    {
+      "id": "floating-button",
+      "name": "悬浮返回顶部按钮",
+      "component": "FloatingButton",
+      "description": "返回顶部的悬浮按钮",
+      "triggerFunction": "scrollToHomeSection()"
+    }
+  ],
+  "navigation": {
+    "mainNavigation": [
+      {
+        "label": "首页",
+        "target": "#home",
+        "function": "scrollToSection('home')"
+      },
+      {
+        "label": "品牌故事卡",
+        "target": "intro-section",
+        "function": "showBrandStoryCards()"
+      },
+      {
+        "label": "品牌故事",
+        "target": "#brand-story",
+        "function": "scrollToSection('brand-story')"
+      },
+      {
+        "label": "产品特点",
+        "target": "#product-features",
+        "function": "scrollToSection('product-features')"
+      },
+      {
+        "label": "产品展示",
+        "target": "#product-showcase",
+        "function": "scrollToSection('product-showcase')"
+      },
+      {
+        "label": "购买指南",
+        "target": "#purchase-guide",
+        "function": "scrollToSection('purchase-guide')"
+      },
+      {
+        "label": "联系我们",
+        "target": "#contact",
+        "function": "scrollToSection('contact')"
+      }
+    ]
+  }
 }

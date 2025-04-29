@@ -43,7 +43,7 @@ const App = () => {
   const [showMainContent, setShowMainContent] = useState(false);
   const [isHeroSectionActive, setIsHeroSectionActive] = useState(true);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [heroKey, setHeroKey] = useState(0); // 添加一个key来强制重新渲染HeroSection
+  const [heroKey, setHeroKey] = useState(0);
   const mainContentRef = useRef(null);
 
   // 确保初始加载时HeroSection是可见的
@@ -54,29 +54,47 @@ const App = () => {
   // 处理HeroSection完成事件
   const handleHeroSectionComplete = () => {
     setIsHeroSectionActive(false);
-    // 确保滚动到主内容区域的顶部
     setTimeout(() => {
-      window.scrollTo({
-        top: 0,
-        behavior: 'auto'
-      });
+      window.scrollTo({ top: 0, behavior: 'auto' });
     }, 100);
   };
 
+  // scrollToTop 函数 - 修改为仅在需要强制显示 HeroSection 时使用 (如 showBrandStoryCards)
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
-    setIsHeroSectionActive(true);
+    setIsHeroSectionActive(true); // 确保 HeroSection 可见
   };
   
+  // scrollToSection 函数 - 用于滚动到主内容区的特定部分
   const scrollToSection = (sectionId) => {
     const section = document.getElementById(sectionId);
     if (section) {
+      // 确保主内容可见
       setIsHeroSectionActive(false);
+      
+      // 使用 setTimeout 确保状态更新后执行滚动
       setTimeout(() => {
-        section.scrollIntoView({ behavior: 'smooth' });
-      }, 100);
+         // 特殊处理 'home' ID，确保滚动到页面顶部
+         if (sectionId === 'home') {
+           window.scrollTo({ top: 0, behavior: 'smooth' });
+         } else {
+           section.scrollIntoView({ behavior: 'smooth' });
+         }
+      }, 50); // 短暂延迟以确保DOM更新
     }
-    setIsMenuOpen(false);
+    setIsMenuOpen(false); // 关闭菜单
+  };
+
+  // 新增函数：滚动到主内容首页
+  const scrollToHomeSection = () => {
+    // 保持在主内容区域
+    setIsHeroSectionActive(false);
+    // 滚动到主内容首页 (页面顶部)
+    // 使用 setTimeout 确保状态更新后执行滚动
+    setTimeout(() => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 50);
+    setIsMenuOpen(false); // 如果菜单是打开的，关闭它
   };
 
   const toggleMenu = (e) => {
@@ -86,9 +104,8 @@ const App = () => {
 
   // 显示品牌故事卡
   const showBrandStoryCards = () => {
-    // 关闭菜单
     setIsMenuOpen(false);
-    // 确保主内容被隐藏
+    // 确保主内容被隐藏，显示 HeroSection
     setIsHeroSectionActive(true);
     // 通过改变key来强制HeroSection重新渲染
     setHeroKey(prevKey => prevKey + 1);
@@ -117,7 +134,7 @@ const App = () => {
             </div>
             
             <nav className="flex flex-col items-center space-y-8">
-              <button onClick={() => scrollToTop()} className="text-white text-2xl hover:text-gold-light transition-colors">首页</button>
+              <button onClick={() => scrollToSection('home')} className="text-white text-2xl hover:text-gold-light transition-colors">首页</button>
               <button onClick={showBrandStoryCards} className="text-white text-2xl hover:text-gold-light transition-colors">品牌故事卡</button>
               <button onClick={() => scrollToSection('brand-story')} className="text-white text-2xl hover:text-gold-light transition-colors">品牌故事</button>
               <button onClick={() => scrollToSection('product-features')} className="text-white text-2xl hover:text-gold-light transition-colors">产品特点</button>
@@ -189,7 +206,7 @@ const App = () => {
         </main>
         
         <FloatingButton
-          onClick={scrollToTop}
+          onClick={scrollToHomeSection} 
           icon="↑"
           label="返回顶部"
         />

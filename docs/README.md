@@ -18,4 +18,7 @@
 
 ## 4. 技术文档
 - [部署指南](./technical/deployment_guide.md)
-- [网站结构](./technical/website_structure.json) 
+- [网站结构定义](./technical/website_structure.json)
+- [网站结构说明文档](./technical/website_structure.md)
+- [导航逻辑修改建议](./technical/suggested_code_changes.md)
+- [Vercel部署指南](./technical/vercel_deployment.md) 
