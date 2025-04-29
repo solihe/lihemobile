@@ -25,8 +25,14 @@ const features = [
 
 const ProductFeatures = () => {
   return (
-    <div className="py-12 px-4 bg-black">
-      <h2 className="text-3xl font-serif font-bold text-center text-white mb-8">产品特性</h2>
+    <div className="pt-2 pb-12 px-4 bg-gradient-to-b from-[#0a0a0a] to-black">
+      {/* 顶部视觉连接元素 */}
+      <div className="w-full flex justify-center mb-8">
+        <div className="w-1 h-16 bg-gradient-to-b from-[#4A0404] to-gold-light/30"></div>
+      </div>
+      
+      <h2 className="text-3xl font-serif font-bold text-center text-gold mb-12">产品特性</h2>
+      
       <div className="flex overflow-x-auto snap-x snap-mandatory pb-6 gap-6 scrollbar-none">
         {features.map((feature, index) => (
           <div

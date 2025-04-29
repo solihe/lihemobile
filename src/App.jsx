@@ -1,9 +1,10 @@
 // src/App.jsx
-import React, { Suspense, useState, useRef } from 'react';
+import React, { Suspense, useState, useRef, useEffect } from 'react';
 import BottomNav from './components/BottomNav';
 import ScrollProgress from './components/ui/ScrollProgress';
 import FloatingButton from './components/ui/FloatingButton';
 import HeroSection from './components/HeroSection';
+import Hero from './components/Hero';
 import './styles/animations.css';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -42,7 +43,25 @@ const App = () => {
   const [showMainContent, setShowMainContent] = useState(false);
   const [isHeroSectionActive, setIsHeroSectionActive] = useState(true);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [heroKey, setHeroKey] = useState(0); // 添加一个key来强制重新渲染HeroSection
   const mainContentRef = useRef(null);
+
+  // 确保初始加载时HeroSection是可见的
+  useEffect(() => {
+    setIsHeroSectionActive(true);
+  }, []);
+
+  // 处理HeroSection完成事件
+  const handleHeroSectionComplete = () => {
+    setIsHeroSectionActive(false);
+    // 确保滚动到主内容区域的顶部
+    setTimeout(() => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'auto'
+      });
+    }, 100);
+  };
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -52,7 +71,10 @@ const App = () => {
   const scrollToSection = (sectionId) => {
     const section = document.getElementById(sectionId);
     if (section) {
-      section.scrollIntoView({ behavior: 'smooth' });
+      setIsHeroSectionActive(false);
+      setTimeout(() => {
+        section.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
     }
     setIsMenuOpen(false);
   };
@@ -60,6 +82,18 @@ const App = () => {
   const toggleMenu = (e) => {
     e?.stopPropagation();
     setIsMenuOpen(!isMenuOpen);
+  };
+
+  // 显示品牌故事卡
+  const showBrandStoryCards = () => {
+    // 关闭菜单
+    setIsMenuOpen(false);
+    // 确保主内容被隐藏
+    setIsHeroSectionActive(true);
+    // 通过改变key来强制HeroSection重新渲染
+    setHeroKey(prevKey => prevKey + 1);
+    // 重置滚动位置
+    window.scrollTo({ top: 0, behavior: 'auto' });
   };
 
   return (
@@ -84,6 +118,7 @@ const App = () => {
             
             <nav className="flex flex-col items-center space-y-8">
               <button onClick={() => scrollToTop()} className="text-white text-2xl hover:text-gold-light transition-colors">首页</button>
+              <button onClick={showBrandStoryCards} className="text-white text-2xl hover:text-gold-light transition-colors">品牌故事卡</button>
               <button onClick={() => scrollToSection('brand-story')} className="text-white text-2xl hover:text-gold-light transition-colors">品牌故事</button>
               <button onClick={() => scrollToSection('product-features')} className="text-white text-2xl hover:text-gold-light transition-colors">产品特点</button>
               <button onClick={() => scrollToSection('product-showcase')} className="text-white text-2xl hover:text-gold-light transition-colors">产品展示</button>
@@ -94,15 +129,25 @@ const App = () => {
         )}
       </AnimatePresence>
       
-      {/* Hero Section */}
-      <div className="relative h-screen">
-        <HeroSection onComplete={() => setIsHeroSectionActive(false)} />
+      {/* Hero Section - 闪卡部分 */}
+      <div 
+        className={`fixed inset-0 w-full h-full ${isHeroSectionActive ? 'z-30 visible' : 'z-0 invisible'}`} 
+        style={{ 
+          opacity: isHeroSectionActive ? 1 : 0,
+          transition: 'opacity 0.8s ease-out, visibility 0.8s ease-out'
+        }}
+      >
+        <HeroSection key={heroKey} onComplete={handleHeroSectionComplete} />
       </div>
       
       {/* 主内容层 */}
       <div 
         ref={mainContentRef}
-        className={`relative z-10 ${isHeroSectionActive ? 'invisible' : 'visible'}`}
+        className={`relative z-20 ${isHeroSectionActive ? 'invisible' : 'visible'}`}
+        style={{
+          transition: 'opacity 0.8s ease-out, visibility 0.8s ease-out',
+          opacity: isHeroSectionActive ? 0 : 1
+        }}
         id="main-content"
       >
         <ScrollProgress />
@@ -114,6 +159,9 @@ const App = () => {
               <div className="w-8 h-8 border-4 border-gold border-t-transparent rounded-full animate-spin"></div>
             </div>
           }>
+            <div id="home">
+              <Hero />
+            </div>
             <div id="product-features">
               <ProductFeatures />
             </div>

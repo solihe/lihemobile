@@ -89,15 +89,46 @@ const HeroSection = ({ onComplete }) => {
   const [currentCard, setCurrentCard] = useState(0);
   const [imagesLoaded, setImagesLoaded] = useState(false);
   const [showClickHint, setShowClickHint] = useState(true);
-  const [showExploreButton, setShowExploreButton] = useState(false);
-  const touchStart = useRef(null);
+  const touchStart = useRef({ x: 0, y: 0 });
+  const [touchDirection, setTouchDirection] = useState(null);
+  // 新增自动播放和暂停功能
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+  const autoPlayTimerRef = useRef(null);
+  // 添加一个状态来控制何时完成
+  const [isCompleting, setIsCompleting] = useState(false);
+  
+  // 重置为第一张卡片
+  const resetCards = () => {
+    setCurrentCard(0);
+    setIsAutoPlaying(true);
+    setIsCompleting(false);
+    setShowClickHint(true);
+  };
 
+  // 组件挂载或key变化时重置状态
+  useEffect(() => {
+    resetCards();
+    return () => {
+      // 清除自动播放计时器
+      if (autoPlayTimerRef.current) {
+        clearTimeout(autoPlayTimerRef.current);
+      }
+    };
+  }, []);
+  
   // 处理完成事件
   useEffect(() => {
-    if (showExploreButton) {
-      onComplete?.();
+    if (currentCard >= flashCards.length - 1) {
+      // 添加延迟，确保用户能够看到最后一张闪卡
+      setIsCompleting(true);
+      // 延迟调用onComplete，给用户足够时间查看最后一张卡片
+      const timer = setTimeout(() => {
+        onComplete?.();
+      }, 4000); // 4秒后再完成
+      
+      return () => clearTimeout(timer);
     }
-  }, [showExploreButton, onComplete]);
+  }, [currentCard, onComplete]);
 
   // 图片预加载
   useEffect(() => {
@@ -110,7 +141,7 @@ const HeroSection = ({ onComplete }) => {
       });
     };
 
-    Promise.all(flashCards.map(card => loadImage(card.image)))
+    Promise.all(flashCards.map(card => card.image && loadImage(card.image)))
       .then(() => {
         setImagesLoaded(true);
         // 3秒后显示点击提示
@@ -118,43 +149,121 @@ const HeroSection = ({ onComplete }) => {
       })
       .catch(error => {
         console.error('Failed to load images:', error);
-        setImagesLoaded(true); // 即使加载失败也继续显示
+        setImagesLoaded(true);
       });
   }, []);
 
+  // 添加自动播放功能
+  useEffect(() => {
+    if (isAutoPlaying && imagesLoaded) {
+      autoPlayTimerRef.current = setTimeout(() => {
+        if (currentCard < flashCards.length - 1) {
+          setCurrentCard(currentCard + 1);
+        } else {
+          setIsAutoPlaying(false);
+          onComplete?.();
+        }
+      }, 4000); // 每4秒自动切换一次闪卡
+    }
+    
+    return () => {
+      if (autoPlayTimerRef.current) {
+        clearTimeout(autoPlayTimerRef.current);
+      }
+    };
+  }, [currentCard, isAutoPlaying, imagesLoaded, onComplete]);
+
+  // 跳过所有闪卡，直接进入主内容
+  const handleSkip = (e) => {
+    e.stopPropagation(); // 阻止冒泡到点击事件
+    setIsAutoPlaying(false);
+    setCurrentCard(flashCards.length - 1);
+    // 不立即调用onComplete，而是设置isCompleting状态，
+    // 让用户能够看到最后一张卡片
+    setIsCompleting(true);
+    // 延迟一段时间后再调用onComplete
+    setTimeout(() => {
+      onComplete?.();
+    }, 2500); // 2.5秒后进入主站，给用户足够时间查看最后一张卡片
+  };
+
+  // 手动控制闪卡
+  const handleManualControl = (e) => {
+    e.stopPropagation(); // 阻止冒泡
+    setIsAutoPlaying(!isAutoPlaying);
+  };
+
   // 处理触摸事件
   const handleTouchStart = (e) => {
-    touchStart.current = e.touches[0].clientX;
+    touchStart.current = {
+      x: e.touches[0].clientX,
+      y: e.touches[0].clientY
+    };
+    setTouchDirection(null);
+  };
+
+  const handleTouchMove = (e) => {
+    if (!touchStart.current) return;
+
+    const touchX = e.touches[0].clientX;
+    const touchY = e.touches[0].clientY;
+    const deltaX = touchStart.current.x - touchX;
+    const deltaY = touchStart.current.y - touchY;
+
+    // 判断滑动方向是否主要为垂直方向
+    if (Math.abs(deltaY) > Math.abs(deltaX)) {
+      setTouchDirection('vertical');
+      e.preventDefault(); // 阻止默认的滚动行为
+    }
   };
 
   const handleTouchEnd = (e) => {
-    if (!touchStart.current) return;
+    if (!touchStart.current || touchDirection !== 'vertical') return;
 
-    const touchEnd = e.changedTouches[0].clientX;
-    const diff = touchStart.current - touchEnd;
+    const touchY = e.changedTouches[0].clientY;
+    const deltaY = touchStart.current.y - touchY;
 
-    // 判断滑动方向
-    if (Math.abs(diff) > 50) { // 最小滑动距离
-      if (diff > 0 && currentCard < flashCards.length - 1) {
-        // 向左滑动
+    // 判断滑动方向和距离
+    if (Math.abs(deltaY) > 50) { // 最小滑动距离
+      if (deltaY > 0 && currentCard < flashCards.length - 1) {
+        // 向上滑动，显示下一张
         setCurrentCard(currentCard + 1);
-      } else if (diff < 0 && currentCard > 0) {
-        // 向右滑动
+        setShowClickHint(false);
+      } else if (deltaY < 0 && currentCard > 0) {
+        // 向下滑动，显示上一张
         setCurrentCard(currentCard - 1);
+        setShowClickHint(false);
       }
     }
 
     touchStart.current = null;
+    setTouchDirection(null);
+  };
+
+  // 处理滚轮事件
+  const handleWheel = (e) => {
+    e.preventDefault();
+    if (e.deltaY > 0 && currentCard < flashCards.length - 1) {
+      // 向下滚动，显示下一张
+      setCurrentCard(currentCard + 1);
+      setShowClickHint(false);
+    } else if (e.deltaY < 0 && currentCard > 0) {
+      // 向上滚动，显示上一张
+      setCurrentCard(currentCard - 1);
+      setShowClickHint(false);
+    }
   };
 
   // 处理点击事件
   const handleClick = () => {
-    setShowClickHint(false);
     if (currentCard < flashCards.length - 1) {
       setCurrentCard(currentCard + 1);
-    } else {
-      // 直接调用onComplete，不再显示探索按钮
-      onComplete?.();
+      setShowClickHint(false);
+      
+      // 如果到达最后一张卡片，停止自动播放
+      if (currentCard === flashCards.length - 2) {
+        setIsAutoPlaying(false);
+      }
     }
   };
 
@@ -168,46 +277,53 @@ const HeroSection = ({ onComplete }) => {
 
   return (
     <section 
-      className="fixed inset-0 w-screen h-screen overflow-hidden bg-black"
+      className={`fixed inset-0 w-screen h-screen overflow-hidden bg-black ${
+        isCompleting ? 'z-30 opacity-100' : 'z-30'
+      }`}
+      style={{
+        transition: 'opacity 0.8s ease-out',
+      }}
       onClick={handleClick}
       onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
+      onWheel={handleWheel}
     >
       {/* 闪卡展示区域 */}
       <AnimatePresence mode="wait">
         <motion.div
           key={currentCard}
-          initial={{ opacity: 0, scale: 1.1 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.9 }}
-          transition={{ duration: 0.8, ease: [0.43, 0.13, 0.23, 0.96] }}
-          className="relative w-full h-screen"
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -50 }}
+          transition={{ duration: 0.6, ease: [0.43, 0.13, 0.23, 0.96] }}
+          className="relative w-full h-screen flex flex-col justify-center"
         >
           {/* 背景图片或文字背景 */}
-          <div className="relative w-full h-full overflow-hidden">
+          <div className="relative w-full flex-1 overflow-hidden flex flex-col justify-center">
             {flashCards[currentCard].isTextOnly ? (
               <>
                 <TextCardBackground />
                 <motion.div 
-                  className="absolute inset-0 flex flex-col items-center justify-center px-6 py-8"
+                  className="absolute inset-0 flex flex-col items-center justify-center px-6 py-16 md:py-24"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.3, duration: 0.6 }}
                 >
                   {flashCards[currentCard].title && (
                     <motion.h1 
-                      className="text-4xl md:text-5xl font-serif text-gold-light mb-6 tracking-wider relative"
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.4, duration: 0.6 }}
+                      className="text-5xl md:text-7xl font-serif text-gold-light mb-8 tracking-wider relative"
+                      initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      transition={{ delay: 0.4, duration: 0.8, ease: [0.23, 1, 0.32, 1] }}
                     >
                       <span className="relative">
                         {flashCards[currentCard].title}
                         <motion.span 
-                          className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 h-[1px] bg-gold-light/90 w-12"
-                          initial={{ width: 0 }}
-                          animate={{ width: '60%' }}
-                          transition={{ delay: 0.8, duration: 0.8 }}
+                          className="absolute -bottom-3 left-1/2 transform -translate-x-1/2 h-[2px] bg-gradient-to-r from-transparent via-gold-light/90 to-transparent w-24"
+                          initial={{ width: 0, opacity: 0 }}
+                          animate={{ width: '120%', opacity: 1 }}
+                          transition={{ delay: 0.8, duration: 1 }}
                         />
                       </span>
                     </motion.h1>
@@ -228,15 +344,45 @@ const HeroSection = ({ onComplete }) => {
                             <SceneBorder />
                           </div>
                           
-                          <h3 className="text-xl md:text-2xl text-gold-light font-serif mb-1.5 tracking-wider relative z-10">{scenario.subtitle}</h3>
+                          <h3 className="text-xl md:text-2xl text-gold-light font-serif mb-1.5 tracking-wider relative z-10 flex items-center justify-center">
+                            <motion.span
+                              initial={{ scale: 0.8, opacity: 0 }}
+                              animate={{ scale: 1, opacity: 1 }}
+                              transition={{ delay: 0.6 + (index * 0.2), duration: 0.5 }}
+                              className="mr-2"
+                            >
+                              {scenario.subtitle === '宴请' ? (
+                                <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none">
+                                  <path d="M12 15.5H7.5C6.10444 15.5 5.40665 15.5 4.83886 15.6722C3.56045 16.06 2.56004 17.0605 2.17224 18.3389C2 18.9067 2 19.6044 2 21M16 18L18 20L22 16M14.5 7.5C14.5 9.98528 12.4853 12 10 12C7.51472 12 5.5 9.98528 5.5 7.5C5.5 5.01472 7.51472 3 10 3C12.4853 3 14.5 5.01472 14.5 7.5Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                </svg>
+                              ) : (
+                                <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none">
+                                  <path d="M12 10L3 19M12 10L21 19M12 10L12 21M22 3H2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                </svg>
+                              )}
+                            </motion.span>
+                            {scenario.subtitle}
+                          </h3>
                           <p className="text-sm md:text-base text-gold-DEFAULT/80 italic mb-2 tracking-wide font-light relative z-10">{scenario.subtext}</p>
                           <motion.div
                             initial={{ scaleX: 0 }}
                             animate={{ scaleX: 1 }}
                             transition={{ delay: 0.7 + (index * 0.2), duration: 0.6 }}
-                            className="w-10 h-[1px] bg-gold-light/70 mx-auto mb-2 relative z-10"
+                            className="w-16 h-[1px] bg-gradient-to-r from-transparent via-gold-light/70 to-transparent mx-auto mb-3 relative z-10"
                           />
-                          <p className="text-sm md:text-base text-gold-light/90 leading-relaxed tracking-wide mx-auto relative z-10 px-1">{scenario.text}</p>
+                          <p className="text-sm md:text-base text-gold-light/90 leading-relaxed tracking-wide mx-auto relative z-10 px-1">
+                            {scenario.text.split('，').map((part, i) => (
+                              <motion.span
+                                key={i}
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.8 + (index * 0.2) + (i * 0.1), duration: 0.5 }}
+                                className={`inline-block ${i === 0 ? 'font-medium text-gold-light' : ''}`}
+                              >
+                                {part}{i < scenario.text.split('，').length - 1 ? '，' : ''}
+                              </motion.span>
+                            ))}
+                          </p>
                         </motion.div>
                       ))}
                     </div>
@@ -283,10 +429,91 @@ const HeroSection = ({ onComplete }) => {
           initial={{ opacity: 0 }}
           animate={{ opacity: [0, 1, 0] }}
           transition={{ duration: 2, repeat: Infinity }}
-          className="absolute bottom-16 left-1/2 transform -translate-x-1/2 text-white/60"
+          className="absolute bottom-16 left-1/2 transform -translate-x-1/2 text-white/60 flex flex-col items-center"
         >
+          <span className="text-sm mb-2">向上滑动</span>
           <ChevronDown />
         </motion.div>
+      )}
+
+      {/* 导航指示器 */}
+      <div className="absolute right-4 top-1/2 transform -translate-y-1/2 flex flex-col space-y-2">
+        {flashCards.map((_, index) => (
+          <div
+            key={index}
+            className={`w-2 h-2 rounded-full transition-all duration-300 ${
+              currentCard === index ? 'bg-gold-light scale-125' : 'bg-white/30'
+            }`}
+          />
+        ))}
+      </div>
+      
+      {/* 跳过按钮 */}
+      <motion.button
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1, duration: 0.5 }}
+        onClick={handleSkip}
+        aria-label="跳过介绍，直接进入网站"
+        className="absolute top-6 right-20 px-4 py-2 rounded-full bg-black/40 backdrop-blur-sm text-white text-sm border border-white/20 hover:bg-black/60 hover:border-white/40 focus:outline-none focus:ring-2 focus:ring-gold-light/50 transition-all duration-300"
+      >
+        跳过
+      </motion.button>
+      
+      {/* 暂停/播放按钮 */}
+      <motion.button
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1, duration: 0.5 }}
+        onClick={handleManualControl}
+        className="absolute top-6 left-6 w-10 h-10 rounded-full bg-black/40 backdrop-blur-sm flex items-center justify-center text-white border border-white/20 hover:bg-black/60 transition-all duration-300"
+      >
+        {isAutoPlaying ? (
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 4H6V20H10V4Z" fill="currentColor" />
+            <path d="M18 4H14V20H18V4Z" fill="currentColor" />
+          </svg>
+        ) : (
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M6 4L18 12L6 20V4Z" fill="currentColor" />
+          </svg>
+        )}
+      </motion.button>
+      
+      {/* 进度指示器 */}
+      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 w-[80%] max-w-md h-1 bg-white/20 rounded-full overflow-hidden">
+        <motion.div 
+          className="h-full bg-gold-light"
+          initial={{ width: 0 }}
+          animate={{ width: `${(currentCard / (flashCards.length - 1)) * 100}%` }}
+          transition={{ duration: 0.3 }}
+        />
+      </div>
+      
+      {/* 在最后一张闪卡时显示"进入网站"按钮 */}
+      {currentCard === flashCards.length - 1 && (
+        <motion.button
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1, duration: 0.5 }}
+          onClick={(e) => {
+            e.stopPropagation();
+            // 先添加一个淡出效果
+            const section = e.currentTarget.closest('section');
+            if (section) {
+              section.style.transition = 'opacity 0.8s ease-out';
+              section.style.opacity = '0';
+            }
+            // 延迟调用onComplete
+            setTimeout(() => {
+              onComplete?.();
+            }, 800);
+          }}
+          aria-label="进入来贺品牌网站"
+          className="absolute bottom-16 left-1/2 transform -translate-x-1/2 px-8 py-3 rounded-full bg-gold-light/90 text-black text-base font-medium hover:bg-gold-light hover:scale-105 focus:outline-none focus:ring-2 focus:ring-gold/50 active:scale-95 transition-all duration-300 shadow-xl"
+        >
+          进入网站
+        </motion.button>
       )}
     </section>
   );
