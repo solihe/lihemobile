@@ -96,6 +96,7 @@ const HeroSection = ({ onComplete }) => {
   const autoPlayTimerRef = useRef(null);
   // 添加一个状态来控制何时完成
   const [isCompleting, setIsCompleting] = useState(false);
+  const sectionRef = useRef(null); // <-- Add ref for the section
   
   // 重置为第一张卡片
   const resetCards = () => {
@@ -116,19 +117,20 @@ const HeroSection = ({ onComplete }) => {
     };
   }, []);
   
-  // 处理完成事件
+  // 处理完成状态：仅当到达最后一张卡片时设置 isCompleting
   useEffect(() => {
     if (currentCard >= flashCards.length - 1) {
-      // 添加延迟，确保用户能够看到最后一张闪卡
-      setIsCompleting(true);
-      // 延迟调用onComplete，给用户足够时间查看最后一张卡片
-      const timer = setTimeout(() => {
-        onComplete?.();
-      }, 4000); // 4秒后再完成
-      
-      return () => clearTimeout(timer);
+      setIsCompleting(true); // Mark as completing to show the final button/state
+      setIsAutoPlaying(false); // Ensure auto-play stops
+      // 移除自动调用 onComplete 的 setTimeout
+      // const timer = setTimeout(() => {
+      //   onComplete?.();
+      // }, 4000); 
+      // return () => clearTimeout(timer);
+    } else {
+      setIsCompleting(false); // Reset if navigating away from the last card
     }
-  }, [currentCard, onComplete]);
+  }, [currentCard]);
 
   // 图片预加载
   useEffect(() => {
@@ -153,38 +155,43 @@ const HeroSection = ({ onComplete }) => {
       });
   }, []);
 
-  // 添加自动播放功能
+  // 修改自动播放功能: 到达最后一张卡时仅停止播放，不调用 onComplete
   useEffect(() => {
-    if (isAutoPlaying && imagesLoaded) {
+    // 清除之前的计时器
+    if (autoPlayTimerRef.current) {
+      clearTimeout(autoPlayTimerRef.current);
+    }
+
+    if (isAutoPlaying && imagesLoaded && currentCard < flashCards.length - 1) {
       autoPlayTimerRef.current = setTimeout(() => {
-        if (currentCard < flashCards.length - 1) {
-          setCurrentCard(currentCard + 1);
-        } else {
-          setIsAutoPlaying(false);
-          onComplete?.();
-        }
+        setCurrentCard(currentCard + 1);
       }, 4000); // 每4秒自动切换一次闪卡
+    } else if (currentCard === flashCards.length - 1) {
+        // 如果已经是最后一张卡片，确保自动播放停止
+        setIsAutoPlaying(false);
+        // 移除这里的 onComplete?.(); 调用
     }
     
+    // 清理函数
     return () => {
       if (autoPlayTimerRef.current) {
         clearTimeout(autoPlayTimerRef.current);
       }
     };
-  }, [currentCard, isAutoPlaying, imagesLoaded, onComplete]);
+  // 依赖项移除了 onComplete，因为它不应再触发此 effect 或被此 effect 调用
+  }, [currentCard, isAutoPlaying, imagesLoaded]); 
 
   // 跳过所有闪卡，直接进入主内容
   const handleSkip = (e) => {
-    e.stopPropagation(); // 阻止冒泡到点击事件
+    e.stopPropagation();
     setIsAutoPlaying(false);
     setCurrentCard(flashCards.length - 1);
-    // 不立即调用onComplete，而是设置isCompleting状态，
-    // 让用户能够看到最后一张卡片
+    // 设置 isCompleting 状态以显示最后一张卡和按钮
     setIsCompleting(true);
-    // 延迟一段时间后再调用onComplete
-    setTimeout(() => {
-      onComplete?.();
-    }, 2500); // 2.5秒后进入主站，给用户足够时间查看最后一张卡片
+    // 移除这里的自动 onComplete 调用
+    // setTimeout(() => {
+    //   onComplete?.();
+    // }, 2500); 
   };
 
   // 手动控制闪卡
@@ -243,6 +250,10 @@ const HeroSection = ({ onComplete }) => {
   // 处理滚轮事件
   const handleWheel = (e) => {
     e.preventDefault();
+    // 停止自动播放
+    if (isAutoPlaying) {
+      setIsAutoPlaying(false);
+    }
     if (e.deltaY > 0 && currentCard < flashCards.length - 1) {
       // 向下滚动，显示下一张
       setCurrentCard(currentCard + 1);
@@ -253,6 +264,23 @@ const HeroSection = ({ onComplete }) => {
       setShowClickHint(false);
     }
   };
+
+  // 添加 useEffect 来处理 wheel 事件监听器
+  useEffect(() => {
+    const element = sectionRef.current;
+    if (element) {
+      // 使用 { passive: false } 来允许 preventDefault
+      element.addEventListener('wheel', handleWheel, { passive: false });
+    }
+    
+    // 清理函数
+    return () => {
+      if (element) {
+        element.removeEventListener('wheel', handleWheel, { passive: false });
+      }
+    };
+    // 依赖项包括 handleWheel，如果它依赖于组件状态（它依赖 isAutoPlaying 和 currentCard）
+  }, [handleWheel]); 
 
   // 处理点击事件
   const handleClick = () => {
@@ -277,6 +305,7 @@ const HeroSection = ({ onComplete }) => {
 
   return (
     <section 
+      ref={sectionRef} // <-- Assign ref
       className={`fixed inset-0 w-screen h-screen overflow-hidden bg-black ${
         isCompleting ? 'z-30 opacity-100' : 'z-30'
       }`}
@@ -287,7 +316,6 @@ const HeroSection = ({ onComplete }) => {
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
-      onWheel={handleWheel}
     >
       {/* 闪卡展示区域 */}
       <AnimatePresence mode="wait">
@@ -312,7 +340,7 @@ const HeroSection = ({ onComplete }) => {
                 >
                   {flashCards[currentCard].title && (
                     <motion.h1 
-                      className="text-5xl md:text-7xl font-serif text-gold-light mb-8 tracking-wider relative"
+                      className="text-5xl md:text-7xl font-serif text-gold-light mb-8 tracking-wider relative flex flex-col items-center"
                       initial={{ opacity: 0, y: 20, scale: 0.95 }}
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       transition={{ delay: 0.4, duration: 0.8, ease: [0.23, 1, 0.32, 1] }}
@@ -326,6 +354,14 @@ const HeroSection = ({ onComplete }) => {
                           transition={{ delay: 0.8, duration: 1 }}
                         />
                       </span>
+                      <motion.p
+                        className="text-lg text-gold-light/80 mt-3 tracking-wider font-light" 
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.6, duration: 0.8 }}
+                      >
+                        首创社交白酒品牌
+                      </motion.p>
                     </motion.h1>
                   )}
                   
@@ -357,13 +393,13 @@ const HeroSection = ({ onComplete }) => {
                                 </svg>
                               ) : (
                                 <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none">
-                                  <path d="M12 10L3 19M12 10L21 19M12 10L12 21M22 3H2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                  <path d="M20 12v10H4V12M4 8h16v4H4V8zm8 12V8m-4 0l-2-4h12l-2 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                                 </svg>
                               )}
                             </motion.span>
                             {scenario.subtitle}
                           </h3>
-                          <p className="text-sm md:text-base text-gold-DEFAULT/80 italic mb-2 tracking-wide font-light relative z-10">{scenario.subtext}</p>
+                          <p className="text-sm md:text-base text-white/80 italic mb-2 tracking-wide font-light relative z-10">{scenario.subtext}</p>
                           <motion.div
                             initial={{ scaleX: 0 }}
                             animate={{ scaleX: 1 }}
@@ -490,12 +526,12 @@ const HeroSection = ({ onComplete }) => {
         />
       </div>
       
-      {/* 在最后一张闪卡时显示"进入网站"按钮 */}
+      {/* 在最后一张闪卡时显示"进入网站"按钮 - onClick 现在是完成的唯一触发器 */}
       {currentCard === flashCards.length - 1 && (
         <motion.button
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1, duration: 0.5 }}
+          transition={{ delay: 1, duration: 0.5 }} // 延迟显示按钮
           onClick={(e) => {
             e.stopPropagation();
             // 先添加一个淡出效果
@@ -504,10 +540,10 @@ const HeroSection = ({ onComplete }) => {
               section.style.transition = 'opacity 0.8s ease-out';
               section.style.opacity = '0';
             }
-            // 延迟调用onComplete
+            // 延迟调用onComplete，让淡出效果完成
             setTimeout(() => {
-              onComplete?.();
-            }, 800);
+              onComplete?.(); // 这是完成引导页的唯一调用点
+            }, 800); // 800ms 延迟匹配淡出效果
           }}
           aria-label="进入来贺品牌网站"
           className="absolute bottom-16 left-1/2 transform -translate-x-1/2 px-8 py-3 rounded-full bg-gold-light/90 text-black text-base font-medium hover:bg-gold-light hover:scale-105 focus:outline-none focus:ring-2 focus:ring-gold/50 active:scale-95 transition-all duration-300 shadow-xl"
