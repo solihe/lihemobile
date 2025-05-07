@@ -11,9 +11,7 @@ const BrandStory = () => {
         <div className="text-center mb-16 max-w-3xl mx-auto">
           <p className="text-lg text-gray-300 leading-relaxed">
             来贺，首个社交功能性白酒品牌，深谙人们在社交场景中渴望"被看见、被记住"的核心需求。
-          </p>
-          <p className="text-lg text-gray-300 leading-relaxed mt-4">
-            来贺，不仅仅是一款白酒，更是连接彼此的桥梁，是宴会上的破冰神器，是你的社交名片。
+            
           </p>
         </div>
 

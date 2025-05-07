@@ -25,9 +25,10 @@ App.jsx
 
 1. **引导页(HeroSection)**：
    - 文件：`src/components/HeroSection.jsx`
-   - 描述：网站加载时首先显示的闪卡序列，介绍品牌故事
+   - 描述：网站加载时首先显示的闪卡序列，介绍品牌故事。**自动播放结束后会停留在最后一张闪卡，等待用户点击"进入网站"按钮。**
    - 状态：`isHeroSectionActive = true` 时显示
    - 触发显示：初始加载、点击菜单中的"品牌故事卡"按钮
+   - **退出机制**：点击最后一张卡片上的"进入网站"按钮或点击"跳过"按钮。
 
 2. **主内容首页(Hero)**：
    - 文件：`src/components/Hero.jsx`
@@ -43,10 +44,12 @@ App.jsx
 1. 应用加载，`App.jsx` 初始化
 2. `isHeroSectionActive` 设为 `true`
 3. 显示引导页(HeroSection)
-4. 用户完成闪卡浏览或点击"跳过"
-5. 调用 `handleHeroSectionComplete()`
-6. `isHeroSectionActive` 设为 `false`
-7. 隐藏引导页，显示主内容区，从 Hero.jsx 开始展示
+4. **闪卡自动播放或用户手动操作至最后一张，停留在最后一张**
+5. **用户点击"进入网站"按钮 (或 "跳过"按钮)**
+6. 触发 `HeroSection` 的 `onComplete` 回调
+7. `App.jsx` 中的 `handleHeroSectionComplete()` 被调用
+8. `isHeroSectionActive` 设为 `false`
+9. 隐藏引导页，显示主内容区，从 Hero.jsx 开始展示
 
 ### 导航逻辑
 

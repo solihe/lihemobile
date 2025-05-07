@@ -7,14 +7,14 @@ const ProductShowcase = () => {
   const products = [
     {
       id: 1,
-      name: '来贺·朱冠',
-      description: '53度酱香型，大师勾调，奔驰同级红花梨实木酒冠，尊享社交体验',
+      name: '来贺·红冠',
+      description: '53度酱香型，大师勾调，奔驰内饰级红花梨实木酒冠，尊享社交体验',
       image: '/assets/images/hero/精彩值得来贺.png'
     },
     {
       id: 2,
-      name: '来贺·玄冠',
-      description: '53度酱香型，大师勾调，宾利同级黑胡桃实木酒冠，品味社交魅力',
+      name: '来贺·黑冠',
+      description: '53度酱香型，大师勾调，宾利内饰级黑胡桃实木酒冠，品味社交魅力',
       image: '/assets/images/hero/精彩值得来贺.png'
     }
   ];

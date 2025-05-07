@@ -11,10 +11,10 @@
       "name": "引导页(闪卡展示)",
       "component": "HeroSection.jsx",
       "path": "/",
-      "description": "网站首次加载显示的引导页，展示品牌故事闪卡",
+      "description": "网站首次加载显示的引导页，展示品牌故事闪卡。结束后停留在最后一张，等待用户点击按钮进入网站。",
       "state": "isHeroSectionActive",
       "activationFunctions": ["初始加载", "showBrandStoryCards()"],
-      "exitFunctions": ["handleHeroSectionComplete()", "handleSkip()"],
+      "exitFunctions": ["'进入网站' button onClick", "handleSkip()"],
       "childElements": [
         {
           "type": "Cards",
@@ -22,7 +22,7 @@
         },
         {
           "type": "Navigation",
-          "description": "跳过按钮、暂停/播放按钮"
+          "description": "跳过按钮、暂停/播放按钮、进入网站按钮(最后一张卡片)"
         }
       ]
     },

@@ -1,13 +1,17 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
   server: {
     host: '0.0.0.0',  // 监听所有网络接口
-    port: 3520,       // 指定端口
+    port: 5173,       // 修改为一个通用端口
   },
   resolve: {
     alias: {
