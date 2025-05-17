@@ -191,15 +191,15 @@ const App = () => {
             <InteractiveExperience />
             <UseCases />
             <Testimonials />
-            <QualityCrafts />
+            {/* <QualityCrafts /> */}
             <div id="purchase-guide">
               <PurchaseGuide />
             </div>
             <div id="contact" className="py-16 text-center">
               <h2 className="text-3xl font-serif text-white mb-8">联系我们</h2>
-              <p className="text-white/70 mb-4">电话: 400-123-4567</p>
-              <p className="text-white/70 mb-4">邮箱: contact@laihe.com</p>
-              <p className="text-white/70 mb-8">地址: 中国北京市朝阳区</p>
+              <p className="text-white/70 mb-4">电话: 18531009956</p>
+              <p className="text-white/70 mb-4">邮箱: info@ilihe.com</p>
+              <p className="text-white/70 mb-8">地址: 江西省铜鼓县工业园</p>
               <p className="text-gray-400 text-sm mt-8">© {new Date().getFullYear()} 来贺. All rights reserved.</p>
             </div>
           </Suspense>

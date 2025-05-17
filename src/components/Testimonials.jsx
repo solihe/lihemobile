@@ -13,38 +13,56 @@ const Testimonials = () => {
       id: 1,
       name: '张总',
       role: '科技公司CEO',
-      image: 'https://img1.baidu.com/it/u=1648855231,288040214&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500',
+      gender: 'male',
       content: '来贺让商务饭局不再尴尬，印章互动让气氛自然活跃。每次带客户用餐，都会用来贺开场，效果非常好。'
     },
     {
       id: 2,
       name: '李小姐',
       role: '新锐设计师',
-      image: 'https://img2.baidu.com/it/u=2125178044,2153429232&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500',
+      gender: 'female',
       content: '婚宴上用来贺，创意十足，朋友们都很感兴趣。红冠系列的外观设计太精美了，甚至有朋友专门收藏。'
     },
     {
       id: 3,
       name: '王先生',
       role: '资深品酒师',
-      image: 'https://img1.baidu.com/it/u=3787335168,392234595&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500',
+      gender: 'male',
       content: '12987酱香工艺确实出色，口感层次丰富，回味悠长。印章酒冠的创意为传统白酒带来了新的体验维度。'
     },
     {
       id: 4,
       name: '赵女士',
       role: '企业高管',
-      image: 'https://img0.baidu.com/it/u=3321605823,2304913585&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500',
+      gender: 'female',
       content: '作为公司活动的礼品，来贺的接受度很高。不仅是酒的品质，更是它带来的社交互动，让整个团队更加凝聚。'
     },
     {
       id: 5,
       name: '陈总',
       role: '餐饮集团创始人',
-      image: 'https://img2.baidu.com/it/u=3574450105,1239732000&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500',
+      gender: 'male',
       content: '我们餐厅专门推出了来贺主题酒席，顾客反馈非常好。印章互动成为了餐厅的特色体验，带动了整体营收增长。'
     }
   ];
+  
+  // 随机分配头像
+  const maleAvatars = [
+    '/assets/images/icons/sir01.webp',
+    '/assets/images/icons/sir02.webp',
+  ];
+  const femaleAvatars = [
+    '/assets/images/icons/lady01.webp',
+    '/assets/images/icons/lady02.webp',
+  ];
+  function getRandomAvatar(gender, idx) {
+    // idx用于保证每次渲染头像稳定
+    if (gender === 'male') {
+      return maleAvatars[idx % maleAvatars.length];
+    } else {
+      return femaleAvatars[idx % femaleAvatars.length];
+    }
+  }
   
   // 移动端显示1个，电脑显示2个
   const getVisibleSlides = () => {
@@ -125,45 +143,48 @@ const Testimonials = () => {
               className="flex transition-transform duration-500 ease-out"
               style={{ transform: `translateX(-${activeSlide * (100 / visibleSlides)}%)` }}
             >
-              {testimonials.map((testimonial) => (
+              {testimonials.map((testimonial, idx) => (
                 <div
                   key={testimonial.id}
                   className={`w-full md:w-1/2 flex-shrink-0 px-4 transition-all duration-300`}
                   style={{ minWidth: `${100 / visibleSlides}%` }}
                 >
                   <DecorativeBorder className="bg-white h-full">
-                    <div className="p-6 flex flex-col h-full">
-                      <div className="flex items-center mb-6">
-                        <div className="w-16 h-16 rounded-full overflow-hidden mr-4 border-2 border-gold">
-                          <img
-                            src={testimonial.image}
-                            alt={testimonial.name}
-                            className="w-full h-full object-cover"
-                          />
-                        </div>
-                        <div>
-                          <h3 className="font-serif font-bold text-xl">{testimonial.name}</h3>
-                          <p className="text-gray-600">{testimonial.role}</p>
-                        </div>
+                    <div className="p-6 flex flex-row h-full items-stretch relative">
+                      {/* 头像大图层 */}
+                      <div className="relative w-32 min-w-32 h-full flex-shrink-0 flex items-center justify-center">
+                        <img
+                          src={getRandomAvatar(testimonial.gender, idx)}
+                          alt={testimonial.name}
+                          className="absolute inset-0 w-full h-full object-cover rounded-full border-2 border-gold"
+                          style={{zIndex: 1, objectFit: 'cover', objectPosition: 'center'}}
+                        />
                       </div>
-                      <p className="text-gray-700 italic flex-grow mb-4">{testimonial.content}</p>
-                      <div className="mt-auto flex justify-end">
-                        <div className="text-gold">
-                          <svg className="w-5 h-5 inline-block" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
-                          </svg>
-                          <svg className="w-5 h-5 inline-block" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
-                          </svg>
-                          <svg className="w-5 h-5 inline-block" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
-                          </svg>
-                          <svg className="w-5 h-5 inline-block" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
-                          </svg>
-                          <svg className="w-5 h-5 inline-block" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
-                          </svg>
+                      {/* 右侧内容 */}
+                      <div className="flex-1 flex flex-col justify-center pl-6 relative">
+                        <p className="text-gray-700 italic flex-grow mb-4">{testimonial.content}</p>
+                        <div className="mt-auto flex flex-col items-end">
+                          <div className="text-gold">
+                            <svg className="w-5 h-5 inline-block" fill="currentColor" viewBox="0 0 24 24">
+                              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                            </svg>
+                            <svg className="w-5 h-5 inline-block" fill="currentColor" viewBox="0 0 24 24">
+                              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                            </svg>
+                            <svg className="w-5 h-5 inline-block" fill="currentColor" viewBox="0 0 24 24">
+                              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                            </svg>
+                            <svg className="w-5 h-5 inline-block" fill="currentColor" viewBox="0 0 24 24">
+                              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                            </svg>
+                            <svg className="w-5 h-5 inline-block" fill="currentColor" viewBox="0 0 24 24">
+                              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                            </svg>
+                          </div>
+                          {/* 姓名职位右下角斜体小字，放在星星下方 */}
+                          <div className="mt-2 text-xs italic text-gray-500 text-right">
+                            {testimonial.name} / {testimonial.role}
+                          </div>
                         </div>
                       </div>
                     </div>

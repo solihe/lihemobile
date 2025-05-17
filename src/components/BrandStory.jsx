@@ -8,46 +8,33 @@ const BrandStory = () => {
       <div className="max-w-6xl mx-auto">
         <h2 className="text-3xl font-serif text-center text-gold mb-12">品牌故事</h2>
         
-        <div className="text-center mb-16 max-w-3xl mx-auto">
-          <p className="text-lg text-gray-300 leading-relaxed">
-            来贺，首个社交功能性白酒品牌，深谙人们在社交场景中渴望"被看见、被记住"的核心需求。
-            
-          </p>
-        </div>
+        <div className="flex flex-col items-center justify-center text-center p-8 space-y-6">
+          {/* 主张卡片 */}
+          <div className="bg-black/60 rounded-xl shadow-lg px-6 py-4 border border-gold max-w-xs">
+            <span className="text-lg text-gold font-bold">来贺</span>
+            <div className="text-base text-gray-100 mt-2">让每一次相聚都被看见、被记住</div>
+          </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <DecorativeBorder className="bg-gray-900 p-8 min-h-[400px] flex flex-col items-center justify-center text-center transform hover:scale-105 transition-transform duration-300">
-            <div className="w-20 h-20 mb-6">
-              <img src="/assets/images/brand-story/heritage-1.jpg" alt="传承" className="w-full h-full object-contain" />
+          {/* 三点卡片 */}
+          <div className="flex flex-col space-y-4 w-full max-w-xs">
+            <div className="bg-gray-800 rounded-lg px-4 py-3 text-center">
+              <span className="text-gold font-bold">好喝</span>
+              <div className="text-gray-200">匠心酿造，品质是社交白酒的根本。</div>
             </div>
-            <h3 className="text-xl font-serif text-gold mb-4">品质传承</h3>
-            <p className="text-gray-300 mb-4">让每一次相聚更有品质</p>
-            <p className="text-gray-400">
-              传承千年酿酒智慧，以匠心致敬每一次相聚。我们相信，优质的品质是让相聚更有意义的基石，是让欢聚更值得期待的保证。
-            </p>
-          </DecorativeBorder>
+            <div className="bg-gray-800 rounded-lg px-4 py-3 text-center">
+              <span className="text-gold font-bold">好看</span>
+              <div className="text-gray-200">独特设计，第一眼就能引起关注。</div>
+            </div>
+            <div className="bg-gray-800 rounded-lg px-4 py-3 text-center">
+              <span className="text-gold font-bold">好玩</span>
+              <div className="text-gray-200">互动体验，让朋友记住你的每一次用心。</div>
+            </div>
+          </div>
 
-          <DecorativeBorder className="bg-gray-900 p-8 min-h-[400px] flex flex-col items-center justify-center text-center transform hover:scale-105 transition-transform duration-300">
-            <div className="w-20 h-20 mb-6">
-              <img src="/assets/images/brand-story/cultural-heritage.jpg" alt="连接" className="w-full h-full object-contain" />
-            </div>
-            <h3 className="text-xl font-serif text-gold mb-4">情感连接</h3>
-            <p className="text-gray-300 mb-4">让每一次相遇更有温度</p>
-            <p className="text-gray-400">
-              我们深知社交中"被看见、被记住"的珍贵。来贺致力于打造自然流畅的社交体验，让每个人都能在交流中展现真实的自己。
-            </p>
-          </DecorativeBorder>
-
-          <DecorativeBorder className="bg-gray-900 p-8 min-h-[400px] flex flex-col items-center justify-center text-center transform hover:scale-105 transition-transform duration-300">
-            <div className="w-20 h-20 mb-6">
-              <img src="/assets/images/brand-story/history-1.jpg" alt="故事" className="w-full h-full object-contain" />
-            </div>
-            <h3 className="text-xl font-serif text-gold mb-4">珍贵回忆</h3>
-            <p className="text-gray-300 mb-4">所有精彩值得来贺</p>
-            <p className="text-gray-400">
-              比酒更浓烈的是你的故事，把这些故事写成贺卡，盖上印章，分享、收藏。
-            </p>
-          </DecorativeBorder>
+          {/* 结尾升华 */}
+          {/* <div className="text-base text-gray-300 mt-4">
+            来贺，不只是白酒，更是每一次相聚的美好记忆。
+          </div> */}
         </div>
       </div>
     </div>

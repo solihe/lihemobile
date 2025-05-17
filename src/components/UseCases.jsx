@@ -28,35 +28,33 @@ const cases = [
 
 const UseCases = () => {
   return (
-    <div className="py-16 px-4 bg-gradient-to-b from-gray-900 to-black">
-      <h2 className="text-3xl font-serif font-bold text-center text-gold mb-12">适用场景</h2>
-      <div className="grid md:grid-cols-3 gap-8">
-        {cases.map((item, index) => (
-          <div
-            key={index}
-            className="transform transition-all duration-500 hover:scale-105"
-          >
-            <DecorativeBorder className="bg-gray-900 overflow-hidden">
-              <div className="relative aspect-[4/3]">
-                <img
-                  src={item.image}
-                  alt={item.title}
-                  className="w-full h-full object-cover"
-                  loading="lazy"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent" />
-              </div>
-              <div className="p-6 text-white">
-                <h3 className="text-xl font-serif font-bold mb-2">
-                  {item.title}
-                </h3>
-                <p className="text-gold mb-2">{item.series}</p>
-                <p className="text-gray-400">{item.subtitle}</p>
-                <p className="text-white/80 mt-2">{item.description}</p>
-              </div>
-            </DecorativeBorder>
+    <div className="flex flex-col items-center justify-center text-center p-8 space-y-6">
+      <div className="text-3xl font-serif text-gold mb-6">适用场景</div>
+      <div className="flex flex-col space-y-4 w-full max-w-xs">
+        {/* 商务宴请 */}
+        <div className="bg-gray-800 rounded-lg px-4 py-3 flex items-center">
+          {/* <img src="/assets/images/biz.webp" alt="商务宴请" className="w-16 h-16 rounded mr-3 object-cover" /> */}
+          <div className="flex-1 flex flex-col items-center justify-center">
+            <span className="text-gold font-bold">商务宴请</span>
+            <div className="text-gray-200 text-sm">尊贵大气，彰显品位</div>
           </div>
-        ))}
+        </div>
+        {/* 婚庆喜宴 */}
+        <div className="bg-gray-800 rounded-lg px-4 py-3 flex items-center">
+          {/* <img src="/assets/images/scene-wedding.jpg" alt="婚庆喜宴" className="w-16 h-16 rounded mr-3 object-cover" /> */}
+          <div className="flex-1 flex flex-col items-center justify-center">
+            <span className="text-gold font-bold">庆贺隆仪</span>
+            <div className="text-gray-200 text-sm">喜庆祥和，传递祝福</div>
+          </div>
+        </div>
+        {/* 重要节日 */}
+        <div className="bg-gray-800 rounded-lg px-4 py-3 flex items-center">
+          {/* <img src="/assets/images/scene-festival.jpg" alt="重要节日" className="w-16 h-16 rounded mr-3 object-cover" /> */}
+          <div className="flex-1 flex flex-col items-center justify-center">
+            <span className="text-gold font-bold">佳节盛宴</span>
+            <div className="text-gray-200 text-sm">欢聚时刻，情谊永存</div>
+          </div>
+        </div>
       </div>
     </div>
   );

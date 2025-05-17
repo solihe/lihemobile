@@ -25,27 +25,34 @@ const features = [
 
 const ProductFeatures = () => {
   return (
+    // 产品特性模块容器，设置渐变背景和上下内边距
     <div className="pt-2 pb-12 px-4 bg-gradient-to-b from-[#0a0a0a] to-black">
-      {/* 顶部视觉连接元素 */}
-      <div className="w-full flex justify-center mb-8">
+      {/* 顶部装饰性分隔线，用于视觉连接 */}
+      {/* <div className="w-full flex justify-center mb-8">
         <div className="w-1 h-16 bg-gradient-to-b from-[#4A0404] to-gold-light/30"></div>
-      </div>
+      </div> */}
       
+      {/* 模块标题 */}
       <h2 className="text-3xl font-serif font-bold text-center text-gold mb-12">产品特性</h2>
       
+      {/* 特性卡片水平滚动容器 */}
       <div className="flex overflow-x-auto snap-x snap-mandatory pb-6 gap-6 scrollbar-none">
+        {/* 遍历features数组生成特性卡片 */}
         {features.map((feature, index) => (
           <div
             key={index}
             className="flex-shrink-0 w-[320px] snap-center overflow-hidden tilt-effect"
           >
+            {/* 使用DecorativeBorder组件包裹卡片内容 */}
             <DecorativeBorder className="p-4 bg-gray-900">
+              {/* 特性图片 */}
               <img
                 src={feature.image}
                 alt={feature.title}
                 className="w-full h-48 object-cover rounded-lg mb-4"
                 loading="lazy"
               />
+              {/* 特性文字内容 */}
               <div className="text-center text-white">
                 <h3 className="text-xl font-serif font-bold text-gold mb-2">{feature.title}</h3>
                 <p className="text-gray-200 mb-2">{feature.subtitle}</p>
