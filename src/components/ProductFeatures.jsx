@@ -7,19 +7,19 @@ const features = [
     title: '社交功能性白酒',
     subtitle: '让饭局社交更有趣',
     description: '独创印章互动，开启自然交流',
-    image: '/assets/images/feature1.webp',
+    image: 'https://ilihe.oss-cn-beijing.aliyuncs.com/assets/images/feature1.webp',
   },
   {
     title: '12987酱香工艺',
     subtitle: '香久味醇，醒酒快不上头',
     description: '一年匠心酿造，成就极致品质',
-    image: '/assets/images/feature2.webp',
+    image: 'https://ilihe.oss-cn-beijing.aliyuncs.com/assets/images/feature2.webp',
   },
   {
     title: '匠心设计美学',
     subtitle: '每个细节，都是考究',
     description: '开盒见礼仪，处处有惊喜',
-    image: '/assets/images/feature3.webp',
+    image: 'https://ilihe.oss-cn-beijing.aliyuncs.com/assets/images/feature3.webp',
   },
 ];
 

@@ -62,7 +62,7 @@
 *   **推荐分辨率** 栏目中的尺寸仅为示例，实际应根据最终设计稿和具体展示需求调整。
 *   **推荐格式** 建议优先使用 `.webp` 以获得更好的压缩和质量，对不支持的浏览器可提供 `.png` 或 `.jpg` 作为回退。SVG适用于矢量图标。
 *   **所属代码组件** 中 "未直接引用" 表示该图片存在于项目文件夹中，但未在当前分析的组件代码中找到直接引用点（可能是未来使用、旧资源或通过非常规方式引用）。
-*   **`EmotionalFlashCards.jsx` 中的图片导入路径** (`/public/...`) 比较特殊。通常 `import` 用于 `src` 内的资源。如果这些图片确实是静态资源，直接在组件中使用字符串路径 `/assets/images/flashcards/饭局.png` 可能更标准。如果希望它们被 Webpack 处理，应移至 `src/assets/images/flashcards/` 并更新导入路径为 `@/assets/images/flashcards/饭局.png`。
+*   **`EmotionalFlashCards.jsx` 中的图片导入路径** (`/public/...`) 比较特殊。通常 `import` 用于 `src` 内的资源。如果这些图片确实是静态资源，直接在组件中使用字符串路径 `https://ilihe.oss-cn-beijing.aliyuncs.com/https://ilihe.oss-cn-beijing.aliyuncs.com/assets/images/flashcards/饭局.png` 可能更标准。如果希望它们被 Webpack 处理，应移至 `src/assets/images/flashcards/` 并更新导入路径为 `@https://ilihe.oss-cn-beijing.aliyuncs.com/https://ilihe.oss-cn-beijing.aliyuncs.com/assets/images/flashcards/饭局.png`。
 *   文件名 `botton-buy.png` 可能存在拼写错误，应为 `button-buy.png`。
 *   请确保所有实际使用的图片都已放置在表格中列出的相应路径下。
 

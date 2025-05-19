@@ -48,12 +48,12 @@ const Testimonials = () => {
   
   // 随机分配头像
   const maleAvatars = [
-    '/assets/images/icons/sir01.webp',
-    '/assets/images/icons/sir02.webp',
+    'https://ilihe.oss-cn-beijing.aliyuncs.com/assets/images/icons/sir01.webp',
+    'https://ilihe.oss-cn-beijing.aliyuncs.com/assets/images/icons/sir02.webp',
   ];
   const femaleAvatars = [
-    '/assets/images/icons/lady01.webp',
-    '/assets/images/icons/lady02.webp',
+    'https://ilihe.oss-cn-beijing.aliyuncs.com/assets/images/icons/lady01.webp',
+    'https://ilihe.oss-cn-beijing.aliyuncs.com/assets/images/icons/lady02.webp',
   ];
   function getRandomAvatar(gender, idx) {
     // idx用于保证每次渲染头像稳定

@@ -27,7 +27,7 @@
 ### 闪卡序列设计
 
 #### 闪卡1：饭局场景
-- **图片素材**：`/assets/images/flashcards/饭局.png`
+- **图片素材**：`https://ilihe.oss-cn-beijing.aliyuncs.com/https://ilihe.oss-cn-beijing.aliyuncs.com/assets/images/flashcards/饭局.png`
 - **场景描述**：现代商务餐厅环境，展现社交场合中的微妙氛围
 - **文案**：「饭局之上，话未出口」
 - **视觉特点**：
@@ -37,7 +37,7 @@
 - **过渡效果**：渐隐渐现（fade），配合轻微模糊转清晰，3秒停留
 
 #### 闪卡2：礼物场景
-- **图片素材**：`/assets/images/flashcards/礼物.png`
+- **图片素材**：`https://ilihe.oss-cn-beijing.aliyuncs.com/https://ilihe.oss-cn-beijing.aliyuncs.com/assets/images/flashcards/礼物.png`
 - **场景描述**：精致礼品陈列，突显送礼困扰，未开封的茅台和五粮液隐约可见
 - **文案**：「礼物之中，心意难表」
 - **视觉特点**：
@@ -47,7 +47,7 @@
 - **过渡效果**：左右滑动（slide）配合景深变化，3秒停留
 
 #### 闪卡3：渴望场景
-- **图片素材**：`/assets/images/flashcards/渴望.png`
+- **图片素材**：`https://ilihe.oss-cn-beijing.aliyuncs.com/https://ilihe.oss-cn-beijing.aliyuncs.com/assets/images/flashcards/渴望.png`
 - **场景描述**：展现人们内心渴望被理解、被认可的情感
 - **文案**：「内心渴望，期待共鸣」
 - **视觉特点**：
@@ -57,7 +57,7 @@
 - **过渡效果**：缩放聚焦（zoom）配合光效渐变，4秒停留
 
 #### 闪卡4：来贺方案
-- **图片素材**：`/assets/images/flashcards/来贺方案.png`
+- **图片素材**：`https://ilihe.oss-cn-beijing.aliyuncs.com/https://ilihe.oss-cn-beijing.aliyuncs.com/assets/images/flashcards/来贺方案.png`
 - **场景描述**：展现来贺白酒带来的完美社交解决方案
 - **文案**：「来贺之时，心意自现」
 - **视觉特点**：
@@ -142,28 +142,28 @@ import { motion, AnimatePresence } from 'framer-motion';
 const flashCards = [
   {
     id: 1,
-    image: '/assets/images/flashcards/饭局.png',
+    image: 'https://ilihe.oss-cn-beijing.aliyuncs.com/https://ilihe.oss-cn-beijing.aliyuncs.com/assets/images/flashcards/饭局.png',
     text: '饭局之上，话未出口',
     duration: 3000,
     transition: 'fade'
   },
   {
     id: 2,
-    image: '/assets/images/flashcards/礼物.png',
+    image: 'https://ilihe.oss-cn-beijing.aliyuncs.com/https://ilihe.oss-cn-beijing.aliyuncs.com/assets/images/flashcards/礼物.png',
     text: '礼物之中，心意难表',
     duration: 3000,
     transition: 'slide'
   },
   {
     id: 3,
-    image: '/assets/images/flashcards/渴望.png',
+    image: 'https://ilihe.oss-cn-beijing.aliyuncs.com/https://ilihe.oss-cn-beijing.aliyuncs.com/assets/images/flashcards/渴望.png',
     text: '内心渴望，期待共鸣',
     duration: 4000,
     transition: 'zoom'
   },
   {
     id: 4,
-    image: '/assets/images/flashcards/来贺方案.png',
+    image: 'https://ilihe.oss-cn-beijing.aliyuncs.com/https://ilihe.oss-cn-beijing.aliyuncs.com/assets/images/flashcards/来贺方案.png',
     text: '来贺之时，心意自现',
     duration: 5000,
     transition: 'elegantFade'

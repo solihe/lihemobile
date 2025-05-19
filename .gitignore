@@ -55,3 +55,12 @@ __pycache__
 backup_old/
 temp/
 .cursor/
+
+# 忽略文档
+docs/
+assets_list.md
+ilihe_mobile_assets.md
+
+# 忽略测试和历史
+.specstory/
+scripts/

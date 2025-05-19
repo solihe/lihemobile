@@ -129,7 +129,7 @@ const App = () => {
             onClick={toggleMenu}
           >
             <div className="text-center mb-12">
-              <img src="/assets/images/Logo/logo-main.png" alt="来贺" className="h-12 mx-auto mb-4" />
+              <img src="https://ilihe.oss-cn-beijing.aliyuncs.com/assets/images/Logo/logo-main.png" alt="来贺" className="h-12 mx-auto mb-4" />
               <p className="text-gold-light/80 text-sm">中国首创社交白酒品牌</p>
             </div>
             

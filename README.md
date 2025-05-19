@@ -7,6 +7,7 @@
 - `ilihe_mobile_assets.md`: 移动端所需的完整素材清单，包括文件名称、描述、风格和大小
 - `assets_to_download.md`: 从ilihe.com网站下载素材的详细指南，包括原网站路径和目标路径
 - `assets/` 目录: 素材的存放位置，按类型和功能组织
+- 完整的项目结构文档请参见: `docs/technical/project_structure.md`
 
 ## 目录结构
 

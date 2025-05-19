@@ -33,7 +33,7 @@ const UseCases = () => {
       <div className="flex flex-col space-y-4 w-full max-w-xs">
         {/* 商务宴请 */}
         <div className="bg-gray-800 rounded-lg px-4 py-3 flex items-center">
-          {/* <img src="/assets/images/biz.webp" alt="商务宴请" className="w-16 h-16 rounded mr-3 object-cover" /> */}
+          {/* <img src="https://ilihe.oss-cn-beijing.aliyuncs.com/https://ilihe.oss-cn-beijing.aliyuncs.com/assets/images/biz.webp" alt="商务宴请" className="w-16 h-16 rounded mr-3 object-cover" /> */}
           <div className="flex-1 flex flex-col items-center justify-center">
             <span className="text-gold font-bold">商务宴请</span>
             <div className="text-gray-200 text-sm">尊贵大气，彰显品位</div>

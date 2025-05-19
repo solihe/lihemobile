@@ -6,7 +6,7 @@ const InteractiveExperience = () => {
 
   // 检查视频是否可用
   useEffect(() => {
-    const videoPath = '/assets/videos/demo.mp4';
+    const videoPath = 'https://ilihe.oss-cn-beijing.aliyuncs.com/assets/videos/demo.mp4';
     const xhr = new XMLHttpRequest();
     xhr.open('HEAD', videoPath, true);
     xhr.onload = function() {
@@ -39,7 +39,7 @@ const InteractiveExperience = () => {
               controls={false}
               onError={() => setVideoError(true)}
             >
-              <source src="/assets/videos/demo.mp4" type="video/mp4" />
+              <source src="https://ilihe.oss-cn-beijing.aliyuncs.com/assets/videos/demo.mp4" type="video/mp4" />
             </video>
           )}
         </div>

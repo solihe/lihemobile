@@ -15,7 +15,7 @@ const Logo = ({ type = 'main', className = '' }) => {
   // Main logo
   return (
     <img 
-      src="/assets/images/Logo/logo-main.png"
+      src="https://ilihe.oss-cn-beijing.aliyuncs.com/assets/images/Logo/logo-main.png"
       alt="来贺"
       className={className}
     />

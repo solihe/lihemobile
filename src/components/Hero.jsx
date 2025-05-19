@@ -7,9 +7,9 @@ const Hero = () => {
   useEffect(() => {
     // 验证图片是否存在
     const img = new Image();
-    img.src = '/assets/images/hero/main_black.webp';
+    img.src = 'https://ilihe.oss-cn-beijing.aliyuncs.com/assets/images/hero/main_black.webp';
     img.onerror = () => {
-      console.error('Hero image failed to load: /assets/images/hero/main_black.webp');
+      console.error('Hero image failed to load: https://ilihe.oss-cn-beijing.aliyuncs.com/assets/images/hero/main_black.webp');
       setImageError(true);
     };
   }, []);
@@ -32,7 +32,7 @@ const Hero = () => {
             </div>
           ) : (
             <img
-              src={'/assets/images/hero/main_black.webp'}
+              src={'https://ilihe.oss-cn-beijing.aliyuncs.com/assets/images/hero/main_black.webp'}
               alt="来贺白酒"
               className="w-full h-full object-contain"
               onError={(e) => {
@@ -54,7 +54,7 @@ const Hero = () => {
         */}
         <div className="w-[80%] max-w-md z-30 -mt-16 mb-2">
           <img
-            src={'/assets/images/hero/精彩值得来贺.png'}
+            src={'https://ilihe.oss-cn-beijing.aliyuncs.com/assets/images/hero/精彩值得来贺.png'}
             alt="精彩值得来贺"
             className="w-full h-auto"
             onError={(e) => {
@@ -73,7 +73,7 @@ const Hero = () => {
         {/* 
         <div className="w-48 cursor-pointer transform hover:scale-105 transition-transform duration-300">
           <img
-            src={'/assets/images/icons/botton-buy.png'}
+            src={'https://ilihe.oss-cn-beijing.aliyuncs.com/assets/images/icons/botton-buy.png'}
             alt="立即购买"
             className="w-full h-auto"
             onClick={() => window.location.href = '#purchase-guide'}

@@ -18,7 +18,7 @@ const PurchaseGuide = () => {
               className="flex flex-col items-center justify-center w-full"
             >
               <img
-                src="/assets/images/jd.webp"
+                src="https://ilihe.oss-cn-beijing.aliyuncs.com/assets/images/jd.webp"
                 alt="京东Logo"
                 className="h-16 w-auto object-contain mb-2"
                 loading="lazy"
@@ -34,7 +34,7 @@ const PurchaseGuide = () => {
           <h3 className="text-xl font-serif font-bold mb-4 text-white">扫码购买</h3>
           <DecorativeBorder className="p-6 bg-gray-900 w-64 flex flex-col items-center justify-center">
             <img
-              src="/assets/images/微信小程序.webp"
+              src="https://ilihe.oss-cn-beijing.aliyuncs.com/assets/images/微信小程序.webp"
               alt="小程序二维码"
               className="h-32 w-auto object-contain mb-4"
               loading="lazy"
